@@ -42,10 +42,14 @@ class PackageTests(unittest.TestCase):
             # initramfs instead: gpu_unlock goes right before nvidia.
             self.assertFalse(any("modprobe.d" in path for path in paths))
             dropin = root / "etc/mkinitcpio.conf.d/zz-gpu-unlock.conf"
-            for before, after in (("zfs nvidia nvidia_drm", "zfs gpu_unlock? nvidia nvidia_drm"),
-                                  ("zfs", "zfs gpu_unlock?")):
-                result = subprocess.run(["bash", "-c", f"MODULES=({before}); . {dropin}; echo ${{MODULES[*]}}"],
-                                        capture_output=True, text=True, check=True)
+            # Never "gpu_unlock?": the systemd hook writes MODULES verbatim to
+            # modules-load.d, so the module would never load.
+            for built, before, after in ((0, "zfs nvidia nvidia_drm", "zfs gpu_unlock nvidia nvidia_drm"),
+                                         (0, "zfs gpu_unlock? nvidia", "zfs gpu_unlock nvidia"),
+                                         (0, "zfs", "zfs gpu_unlock"),
+                                         (1, "zfs gpu_unlock? nvidia", "zfs nvidia")):
+                script = f"modinfo() {{ return {built}; }}; MODULES=({before}); . {dropin}; echo ${{MODULES[*]}}"
+                result = subprocess.run(["bash", "-c", script], capture_output=True, text=True, check=True)
                 self.assertEqual(result.stdout.strip(), after)
 
     def test_pkgbuild_pins_match_manifest(self):
