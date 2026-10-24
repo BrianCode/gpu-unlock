@@ -35,6 +35,7 @@ whether it worked or not.
 | GA104 | RTX 3070                          | `10de:2484` | Unlocked                            | +73–81%        | [#10](https://github.com/Zagitta/gpu-unlock/issues/10), [#12](https://github.com/Zagitta/gpu-unlock/issues/12) |
 | GA104 | RTX 3070 Ti                       | `10de:2482` | Not tested with this module (the same unlock worked from a UEFI port on Windows) | — | [#32](https://github.com/Zagitta/gpu-unlock/issues/32) |
 | GA106 | RTX 3060 12 GB                    | `10de:2504` | Unlocked                            | about +80%     | [#13](https://github.com/Zagitta/gpu-unlock/pull/13), [#31](https://github.com/Zagitta/gpu-unlock/issues/31) |
+| GA107 | RTX 3050 6GB Laptop GPU           | `10de:25ac` | Unlocked                            | +33–54%        | [#68](https://github.com/Zagitta/gpu-unlock/issues/68) |
 | GA103 | any                               | `10de:2414` | No reports yet                      | —              | — |
 
 The gains are dense GEMM throughput from each report's own benchmark, so
